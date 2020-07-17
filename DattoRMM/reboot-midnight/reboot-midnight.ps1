@@ -1,0 +1,2 @@
+$rebootDelay = [math]::Round((New-TimeSpan -Start (Get-Date) -End ([datetime]"23:59")).TotalSeconds)
+shutdown.exe /r /f /c "This computer will restart at midnight tonight automatically. Please ensure all applications are closed before the reboot." /d p:0:0 /t $rebootDelay
