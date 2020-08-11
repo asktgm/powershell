@@ -1,0 +1,24 @@
+"Domain","Permissions","Identity","User","AccessRights","Trustee","Mailbox","GrantedUsers"
+"wilkinsit.net","Mailbox Permissions","","","","","",""
+,,"sharedboxtest","testing@wilkinsit.net","FullAccess",,,
+,,"testingnew","testing@wilkinsit.net","FullAccess",,,
+"wilkinsit.net","SendAs Permissions","","","","","",""
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+"wilkinsit.net","SendOnBehalf Permissions","","","","","",""
+,,,,,,"testingnewshared@wilkinsit.net","sharedboxtest2,testing"
+"7mj6rhpw5ls8.AUSEA02.ucaas.cld.services","SendOnBehalf Permissions","","","","","",""
+"7mj6rhpw5ls8.AUSWA03.ucaas.cld.services","SendOnBehalf Permissions","","","","","",""
+"wilkinsittesting.onmicrosoft.com","Mailbox Permissions","","","","","",""
+,,"testing","admin@wilkinsittesting.onmicrosoft.com","FullAccess",,,
+"wilkinsittesting.onmicrosoft.com","SendAs Permissions","","","","","",""
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+"wilkinsittesting.onmicrosoft.com","SendOnBehalf Permissions","","","","","",""
