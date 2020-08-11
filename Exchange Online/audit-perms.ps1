@@ -5,7 +5,7 @@ if ((Get-PSSession).ConfigurationName -eq "Microsoft.Exchange"){
         [string] $GrantedUsers
     }
     $domains = (Get-AcceptedDomain).DomainName
-    $defaultDomain = (Get-AcceptedDomain | Where {$_.Default -eq $true}).DomainName
+    $defaultDomain = (Get-AcceptedDomain | Where-Object {$_.Default -eq $true}).DomainName
     $mailboxes = Get-Mailbox
     $recipPerms = Get-RecipientPermission
     $SOBehalfPerms = $mailboxes | Where-Object {$_.GrantSendOnBehalfTo -ne '' -and $null -ne $_.GrantSendOnBehalfTo}
@@ -15,6 +15,7 @@ if ((Get-PSSession).ConfigurationName -eq "Microsoft.Exchange"){
     $SendOnBehalfPermissions[0].GrantedUsers = 'init'
     $SendOnBehalfPermissions.RemoveAt(0) #object initialized, ready to add data
     $csvPath = "$PSScriptRoot\permission_audit_$($defaultDomain)_$(get-date -Format dd.MM.yyyy.HH.mm.ss).csv"
+    $ph = "- - - - -"
 
     foreach($d in $domains){
         Write-Host -ForegroundColor Yellow "Checking domain $d for mailbox permissions:"
@@ -22,16 +23,16 @@ if ((Get-PSSession).ConfigurationName -eq "Microsoft.Exchange"){
         if ($null -eq $MailboxPermissions -or [string]::IsNullOrEmpty($MailboxPermissions)){
             Write-Host "No special permissions found"
         }else{
-            $MailboxPermissions | ft
+            $MailboxPermissions | Format-Table
             [pscustomobject]@{
                 Domain = $d
                 Permissions = "Mailbox Permissions"
-                Identity = ""
-                User = ""
-                AccessRights = ""
-                Trustee = ""
-                Mailbox = ""
-                GrantedUsers = ""
+                Identity = $ph
+                User = $ph
+                AccessRights = $ph
+                Trustee = $ph
+                Mailbox = $ph
+                GrantedUsers = $ph
             } | Export-Csv -Path $csvPath -NoTypeInformation -Append
             $MailboxPermissions | Export-Csv -Path $csvPath -NoTypeInformation -Append -Force
             $MailboxPermissions = $null #clear data for re-use
@@ -41,16 +42,16 @@ if ((Get-PSSession).ConfigurationName -eq "Microsoft.Exchange"){
         if ($null -eq $SendAsPermissions -or [string]::IsNullOrEmpty($SendAsPermissions)){
             Write-Host "No special permissions found"
         }else{
-            $SendAsPermissions | ft
+            $SendAsPermissions | Format-Table
             [pscustomobject]@{
                 Domain = $d
                 Permissions = "SendAs Permissions"
-                Identity = ""
-                User = ""
-                AccessRights = ""
-                Trustee = ""
-                Mailbox = ""
-                GrantedUsers = ""
+                Identity = $ph
+                User = $ph
+                AccessRights = $ph
+                Trustee = $ph
+                Mailbox = $ph
+                GrantedUsers = $ph
             } | Export-Csv -Path $csvPath -NoTypeInformation -Append
             $SendAsPermissions | Export-Csv -Path $csvPath -NoTypeInformation -Append -Force
             $SendAsPermissions = $null #clear data for re-use
@@ -67,7 +68,7 @@ if ((Get-PSSession).ConfigurationName -eq "Microsoft.Exchange"){
             #loop through each mailbox
             if (!([string]::IsNullOrEmpty($domSOBPerms[$x].GrantSendOnBehalfTo))){
                 $temp = $null
-                ($domSOBPerms[$x] | Select-Object -ExpandProperty GrantSendOnBehalfTo) | foreach{$temp += $($_+",")}
+                ($domSOBPerms[$x] | Select-Object -ExpandProperty GrantSendOnBehalfTo) | ForEach-Object{$temp += $($_+",")}
                 $newdata = [SOBP] @{ Mailbox = $domSOBPerms[$x].PrimarySmtpAddress; GrantedUsers = $temp.Trim(",")}
                 $SendOnBehalfPermissions.Add($newdata)
             }
@@ -75,16 +76,16 @@ if ((Get-PSSession).ConfigurationName -eq "Microsoft.Exchange"){
         if ($null -eq $SendOnBehalfPermissions -or [string]::IsNullOrEmpty($SendOnBehalfPermissions)){
             Write-Host "No special permissions found"
         }else{
-            $SendOnBehalfPermissions | Where-Object {$_.Mailbox -like "*$($d)"} | ft
+            $SendOnBehalfPermissions | Where-Object {$_.Mailbox -like "*$($d)"} | Format-Table
             [pscustomobject]@{
                 Domain = $d
                 Permissions = "SendOnBehalf Permissions"
-                Identity = ""
-                User = ""
-                AccessRights = ""
-                Trustee = ""
-                Mailbox = ""
-                GrantedUsers = ""
+                Identity = $ph
+                User = $ph
+                AccessRights = $ph
+                Trustee = $ph
+                Mailbox = $ph
+                GrantedUsers = $ph
             } | Export-Csv -Path $csvPath -NoTypeInformation -Append
             $SendOnBehalfPermissions | Where-Object {$_.Mailbox -like "*$($d)"} | Export-Csv -Path $csvPath -NoTypeInformation -Append -Force
         }
